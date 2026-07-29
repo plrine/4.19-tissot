@@ -558,9 +558,7 @@ static void __init mm_init(void)
 	pti_init();
 }
 
-#if IS_ENABLED(CONFIG_MACH_XIAOMI_YSL)
 int fpsensor=1;
-#endif
 asmlinkage __visible void __init start_kernel(void)
 {
 	char *command_line;

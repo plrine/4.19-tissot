@@ -30,10 +30,8 @@ DEFINE_MSM_MUTEX(msm_flash_mutex);
 static struct v4l2_file_operations msm_flash_v4l2_subdev_fops;
 static struct led_trigger *torch_trigger;
 
-#if IS_ENABLED(CONFIG_MACH_XIAOMI_VINCE)
 static struct msm_flash_ctrl_t *flashlight_ctrl;
 static unsigned char flashlight_brightness_value;
-#endif
 
 static const struct of_device_id msm_flash_i2c_dt_match[] = {
 	{.compatible = "qcom,camera-flash"},
@@ -178,9 +176,7 @@ int32_t msm_flashlight_create_classdev(struct platform_device *pdev,
 }
 #endif
 
-#if IS_ENABLED(CONFIG_MACH_XIAOMI_YSL)
 static int msm_torch_led_num;
-#endif
 
 static int32_t msm_torch_create_classdev(struct platform_device *pdev,
 				void *data)

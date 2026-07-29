@@ -3170,7 +3170,7 @@ static int mdss_mdp_probe(struct platform_device *pdev)
 		if (split_display)
 			num_of_display_on--;
 	}
-	if (!num_of_display_on) {
+	if (!num_of_display_on || IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY) || IS_ENABLED(CONFIG_MACH_XIAOMI_TISSOT)) {
 		mdss_mdp_footswitch_ctrl_splash(false);
 	} else {
 		mdata->handoff_pending = true;

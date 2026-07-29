@@ -85,9 +85,12 @@ static int msm_dmic_event(struct snd_soc_dapm_widget *w,
 #if IS_ENABLED(CONFIG_MACH_XIAOMI_ROSY)
 extern unsigned char AW87319_Audio_Speaker(void);
 extern unsigned char AW87319_Audio_OFF(void);
+#else
+static inline unsigned char AW87319_Audio_Speaker(void) { return 0; }
+static inline unsigned char AW87319_Audio_OFF(void) { return 0; }
 #endif
 
-#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY)
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY) || IS_ENABLED(CONFIG_MACH_XIAOMI_TISSOT)
 int ext_pa_gpio = 0;
 int ext_pa_status = 0;
 #endif
@@ -416,7 +419,7 @@ int is_ext_spk_gpio_support(struct platform_device *pdev,
 				__func__, pdata->spk_ext_pa_gpio);
 			return -EINVAL;
 		}
-#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY)
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY) || IS_ENABLED(CONFIG_MACH_XIAOMI_TISSOT)
 		if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_TIFFANY) {
 			ext_pa_gpio = pdata->spk_ext_pa_gpio;
 		}

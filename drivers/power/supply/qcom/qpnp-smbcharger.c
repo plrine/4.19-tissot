@@ -4456,9 +4456,9 @@ static int smbchg_restricted_charging(struct smbchg_chip *chip, bool enable)
 	return rc;
 }
 
+int set_usb_charge_mode_par = 0;
 #if IS_ENABLED(CONFIG_MACH_XIAOMI_MIDO)
 extern void ist30xx_set_ta_mode(bool mode);
-int set_usb_charge_mode_par = 0;
 #endif
 
 static void handle_usb_removal(struct smbchg_chip *chip)

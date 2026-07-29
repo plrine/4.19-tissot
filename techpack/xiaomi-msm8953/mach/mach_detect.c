@@ -28,6 +28,8 @@ static const xiaomi_msm8953_mach_info_t xiaomi_msm8953_mach_table[XIAOMI_MSM8953
 
 	[XIAOMI_MSM8953_MACH_TIFFANY] = {XIAOMI_MSM8953_MACH_FAMILY_QRD, "xiaomi,tiffany", "tiffany", "Mi 5X"},
 
+	[XIAOMI_MSM8953_MACH_TISSOT] = {XIAOMI_MSM8953_MACH_FAMILY_QRD, "xiaomi,tissot", "tissot", "Mi A1"},
+
 	[XIAOMI_MSM8953_MACH_DAISY] = {XIAOMI_MSM8953_MACH_FAMILY_QRD, "xiaomi,daisy", "daisy", "Mi A2"},
 
 	[XIAOMI_MSM8953_MACH_SAKURA] = {XIAOMI_MSM8953_MACH_FAMILY_QRD, "xiaomi,sakura", "sakura", "Redmi 6 Pro"},
@@ -40,6 +42,7 @@ static const xiaomi_msm8953_mach_info_t xiaomi_msm8953_mach_table[XIAOMI_MSM8953
 static enum xiaomi_msm8953_mach_types saved_mach = XIAOMI_MSM8953_MACH_UNKNOWN;
 static struct kobject *xiaomi_msm8953_mach_kobj;
 
+#if !IS_ENABLED(CONFIG_MACH_XIAOMI_TISSOT)
 enum xiaomi_msm8953_mach_family_types xiaomi_msm8953_mach_get_family(void) {
 	if (!saved_mach)
 		return XIAOMI_MSM8953_MACH_FAMILY_UNKNOWN;
@@ -51,6 +54,7 @@ enum xiaomi_msm8953_mach_types xiaomi_msm8953_mach_get(void) {
 	return saved_mach;
 }
 EXPORT_SYMBOL(xiaomi_msm8953_mach_get);
+#endif
 
 static ssize_t xiaomi_msm8953_mach_codename_show(struct kobject *kobj,
 						struct kobj_attribute *attr, char *buf)

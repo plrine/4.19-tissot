@@ -1768,6 +1768,7 @@ static int msm_eeprom_platform_probe(struct platform_device *pdev)
             goto memdata_free;
         }
 
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_ROSY)
         if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_ROSY) {
             if (!strcmp(eb_info->eeprom_name, "ovt_ov5675_i")){
                 printk("insensor eeprom todo init the otp register!\n");
@@ -1809,6 +1810,7 @@ static int msm_eeprom_platform_probe(struct platform_device *pdev)
                 }
             }
         }
+#endif
 
         rc = read_eeprom_memory(e_ctrl, &e_ctrl->cal_data);
         if (rc < 0) {
@@ -1820,6 +1822,7 @@ static int msm_eeprom_platform_probe(struct platform_device *pdev)
             CDBG("memory_data[%d] = 0x%X\n", j,
                 e_ctrl->cal_data.mapdata[j]);
 
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_ROSY)
         if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_ROSY) {
             if (!strcmp(eb_info->eeprom_name, "ovt_ov12a10_i")) {
                 CDBG("match id for ovt_ov12a10_i\n");
@@ -1899,6 +1902,7 @@ static int msm_eeprom_platform_probe(struct platform_device *pdev)
             }
             CDBG("%s eeprom module id: main_module_id=%d  sub_module_id=%d\n", __func__, main_module_id, sub_module_id);
         }
+#endif
 
         e_ctrl->is_supported |= msm_eeprom_match_crc(&e_ctrl->cal_data);
 

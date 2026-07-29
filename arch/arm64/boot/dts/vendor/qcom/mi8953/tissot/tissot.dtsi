@@ -1,0 +1,22 @@
+/*
+ * Tissot (Xiaomi Mi A1 / tissot_sprout) main DTSI aggregator
+ * for msm8953-419 kernel tree.
+ *
+ * Tissot is the Android One / stock Android variant of the tiffany platform
+ * (Redmi Note 4X). Hardware is essentially identical; primary differences are:
+ *  - Partition layout: uses "cust" partition for vendor (same as mido)
+ *  - No MIUI-specific fstab entries
+ *  - SPI6 IR blaster present (same as tiffany)
+ */
+#include "../common/sdhc.dtsi"
+#include "../common/pinctrl.dtsi"
+#include "android.dtsi"
+#include "display.dtsi"
+#include "touchscreen.dtsi"
+#include "camera.dtsi"
+#include "battery.dtsi"
+#include "audio.dtsi"
+#include "misc.dtsi"
+#include "pinctrl.dtsi"
+#include "fingerprint.dtsi"
+#include "pmic.dtsi"

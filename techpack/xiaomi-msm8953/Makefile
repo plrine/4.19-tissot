@@ -1,5 +1,5 @@
-ifeq ($(CONFIG_MACH_XIAOMI_MSM8953),y)
-obj-$(CONFIG_MACH_XIAOMI_MSM8953) += mach/
+ifneq ($(CONFIG_MACH_XIAOMI_MSM8953)$(CONFIG_MACH_XIAOMI_TISSOT),)
+obj-y += mach/
 obj-$(CONFIG_INPUT_TOUCHSCREEN) += touchscreen/
 obj-y += pmic/
 obj-y += power_supply/

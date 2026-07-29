@@ -4630,7 +4630,7 @@ static int fg_power_get_property(struct power_supply *psy,
             val->intval = 1;
         break;
     case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY)
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY) || IS_ENABLED(CONFIG_MACH_XIAOMI_TISSOT)
         if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_TIFFANY)
             val->intval = 3080000;
         else
@@ -4638,7 +4638,7 @@ static int fg_power_get_property(struct power_supply *psy,
             val->intval = chip->nom_cap_uah;
         break;
     case POWER_SUPPLY_PROP_CHARGE_FULL:
-#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY)
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY) || IS_ENABLED(CONFIG_MACH_XIAOMI_TISSOT)
         if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_TIFFANY)
             val->intval = 3080000;
         else

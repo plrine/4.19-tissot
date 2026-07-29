@@ -2684,8 +2684,8 @@ static int mdss_fb_register(struct msm_fb_data_type *mfd)
 	var->width = -1,	/* width of picture in mm */
 	var->accel_flags = 0,	/* acceleration flags */
 	var->sync = 0,	/* see FB_SYNC_* */
-	var->rotate = 0,	/* angle we rotate counter clockwise */
-	mfd->op_enable = false;
+	var->rotate = 0;	/* angle we rotate counter clockwise */
+	mfd->op_enable = true;
 
 	switch (mfd->fb_imgType) {
 	case MDP_RGB_565:

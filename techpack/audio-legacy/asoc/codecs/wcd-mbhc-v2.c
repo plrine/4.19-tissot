@@ -550,7 +550,7 @@ void wcd_mbhc_hs_elec_irq(struct wcd_mbhc *mbhc, int irq_type,
 }
 EXPORT_SYMBOL(wcd_mbhc_hs_elec_irq);
 
-#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY)
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY) || IS_ENABLED(CONFIG_MACH_XIAOMI_TISSOT)
 extern int ext_pa_gpio;
 extern int ext_pa_status;
 #endif
@@ -611,7 +611,7 @@ void wcd_mbhc_report_plug(struct wcd_mbhc *mbhc, int insertion,
 		hphlocp_off_report(mbhc, SND_JACK_OC_HPHL);
 		mbhc->current_plug = MBHC_PLUG_TYPE_NONE;
 		mbhc->force_linein = false;
-#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY)
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY) || IS_ENABLED(CONFIG_MACH_XIAOMI_TISSOT)
 		if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_TIFFANY) {
 			gpio_set_value(ext_pa_gpio, 0);
 		}
@@ -756,7 +756,7 @@ void wcd_mbhc_report_plug(struct wcd_mbhc *mbhc, int insertion,
 				    (mbhc->hph_status | SND_JACK_MECHANICAL),
 				    WCD_MBHC_JACK_MASK);
 		wcd_mbhc_clr_and_turnon_hph_padac(mbhc);
-#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY)
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY) || IS_ENABLED(CONFIG_MACH_XIAOMI_TISSOT)
 		if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_TIFFANY) {
 			msleep(500);
 			if (ext_pa_status)

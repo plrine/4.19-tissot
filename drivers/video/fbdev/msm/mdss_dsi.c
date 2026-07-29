@@ -133,10 +133,12 @@ void mdss_dump_dsi_debug_bus(u32 bus_dump_flag,
 }
 
 #if IS_ENABLED(CONFIG_MACH_XIAOMI_MIDO) || \
-    IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY)
+    IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY) || \
+    IS_ENABLED(CONFIG_MACH_XIAOMI_TISSOT)
 int panel_suspend_reset_flag = 0;
 #endif
-#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY)
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY) || \
+    IS_ENABLED(CONFIG_MACH_XIAOMI_TISSOT)
 int panel_suspend_power_flag = 0;
 #endif
 static void mdss_dsi_pm_qos_add_request(struct mdss_dsi_ctrl_pdata *ctrl_pdata)
@@ -364,13 +366,14 @@ static int mdss_dsi_regulator_init(struct platform_device *pdev,
 	return rc;
 }
 
-#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY)
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY) || IS_ENABLED(CONFIG_MACH_XIAOMI_TISSOT)
 int acc_vreg = 0;
 #endif
 
 int mdss_dsi_panel_power_off(struct mdss_panel_data *pdata)
 {
     int ret = 0;
+    int mach = xiaomi_msm8953_mach_get();
     struct mdss_dsi_ctrl_pdata *ctrl_pdata = NULL;
 
     if (pdata == NULL) {
@@ -401,7 +404,7 @@ int mdss_dsi_panel_power_off(struct mdss_panel_data *pdata)
 #endif
 
 
-    if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_TIFFANY) {
+    if (mach == XIAOMI_MSM8953_MACH_TIFFANY || mach == XIAOMI_MSM8953_MACH_TISSOT) {
         if ((panel_suspend_power_flag != 3) && acc_vreg) {
             ret = msm_mdss_enable_vreg(
                 ctrl_pdata->panel_power_data.vreg_config,
@@ -439,7 +442,7 @@ static int mdss_dsi_panel_power_on(struct mdss_panel_data *pdata)
     int ret = 0;
     struct mdss_dsi_ctrl_pdata *ctrl_pdata = NULL;
     int mach = xiaomi_msm8953_mach_get();
-    int is_tiffany = (mach == XIAOMI_MSM8953_MACH_TIFFANY);
+    int is_tiffany = (mach == XIAOMI_MSM8953_MACH_TIFFANY || mach == XIAOMI_MSM8953_MACH_TISSOT);
 
     if (pdata == NULL) {
         pr_err("%s: Invalid input data\n", __func__);
@@ -479,7 +482,8 @@ static int mdss_dsi_panel_power_on(struct mdss_panel_data *pdata)
      * the lp11_init flag is set or not.
      */
     if (pdata->panel_info.cont_splash_enabled ||
-        !pdata->panel_info.mipi.lp11_init) {
+        !pdata->panel_info.mipi.lp11_init ||
+        is_tiffany) {
         if (mdss_dsi_pinctrl_set_state(ctrl_pdata, true))
             pr_debug("reset enable: pinctrl not enabled\n");
 
@@ -3291,8 +3295,9 @@ static struct device_node *mdss_dsi_find_panel_of_node(
 		if (!strcmp(panel_name, NONE_PANEL))
 			goto exit;
 
-#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY)
-		if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_TIFFANY) {
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY) || IS_ENABLED(CONFIG_MACH_XIAOMI_TISSOT)
+		if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_TIFFANY ||
+		    xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_TISSOT) {
 			if (!strcmp(panel_name, "qcom,mdss_dsi_td4310_fhd_video")) {
 				panel_suspend_reset_flag = 1;
 				panel_suspend_power_flag = 1;
@@ -3607,7 +3612,7 @@ error:
 	return rc;
 }
 
-#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY)
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY) || IS_ENABLED(CONFIG_MACH_XIAOMI_TISSOT)
 struct mdss_panel_data *panel_data;
 #endif
 
@@ -3704,8 +3709,9 @@ static int mdss_dsi_ctrl_probe(struct platform_device *pdev)
 		ctrl_pdata->bklt_ctrl = UNKNOWN_CTRL;
 	}
 
-#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY)
-	if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_TIFFANY)
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY) || IS_ENABLED(CONFIG_MACH_XIAOMI_TISSOT)
+	if (xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_TIFFANY ||
+	    xiaomi_msm8953_mach_get() == XIAOMI_MSM8953_MACH_TISSOT)
         panel_data = &ctrl_pdata->panel_data;
 #endif
 
@@ -4863,9 +4869,14 @@ int dsi_panel_device_register(struct platform_device *ctrl_pdev,
 		}
 	}
 
+#if IS_ENABLED(CONFIG_MACH_XIAOMI_TIFFANY) || IS_ENABLED(CONFIG_MACH_XIAOMI_TISSOT)
+	pinfo->cont_splash_enabled = false;
+	pinfo->panel_power_state = MDSS_PANEL_POWER_OFF;
+#else
 	pinfo->cont_splash_enabled =
 		ctrl_pdata->mdss_util->panel_intf_status(pinfo->pdest,
 		MDSS_PANEL_INTF_DSI) ? true : false;
+#endif
 
 	pr_info("%s: Continuous splash %s\n", __func__,
 		pinfo->cont_splash_enabled ? "enabled" : "disabled");
